@@ -1,11 +1,25 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import BaseLayout from '../layouts/Layout.astro';
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<BaseLayout>
+  <section class="max-w-3xl mx-auto px-4 py-10 text-gray-800">
+    <h1 class="text-3xl font-bold text-blue-600 mb-6">Benvenuto a SanZac</h1>
+
+    <p class="mb-4 text-lg">
+      <strong>SanZac</strong> offre uno spazio creativo dedicato ad artisti e musicisti, pensato per creare e registrare contenuti in libertà.
+    </p>
+
+    <p class="mb-4 text-lg">
+      La sala è disponibile su prenotazione al costo di <strong>20€ l’ora</strong>. La prenotazione è obbligatoria e il pagamento avviene direttamente in loco, al termine dell’utilizzo.
+    </p>
+
+    <p class="mb-4 text-lg">
+      Questo spazio è frutto del lavoro e della dedizione dei membri dell’associazione <em>"Vedi meglio quando senti"</em>, che si impegna a promuovere la cultura e la libera espressione.
+    </p>
+
+    <p class="mt-6 italic text-gray-600">
+      Porta rispetto per lo spazio e per chi lo condivide con te: <strong>lascialo come l’hai trovato</strong>.
+    </p>
+  </section>
+</BaseLayout>

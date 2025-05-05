@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+.react-calendar {
+  @apply w-full max-w-md bg-white text-gray-800 rounded-lg overflow-hidden;
+}
+
+.react-calendar__tile {
+  @apply p-2 text-center hover:bg-blue-100 rounded transition-colors duration-200;
+}
+
+.react-calendar__tile--active {
+  @apply bg-blue-500 text-white;
+}
+
+.react-calendar__navigation button {
+  @apply text-gray-700 font-medium;
+}
