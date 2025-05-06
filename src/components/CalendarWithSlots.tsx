@@ -117,7 +117,7 @@ const CalendarWithSlots: React.FC = () => {
   }, [selectedDate]);
 
   return (
-    <div className="p-6 bg-white rounded shadow-lg mx-auto">
+    <div className="p-6 rounded shadow-lg mx-auto">
       <div className="flex justify-center">
         <Calendar
           onChange={(date) => {
@@ -129,7 +129,7 @@ const CalendarWithSlots: React.FC = () => {
         />
       </div>
 
-      <h3 className="mt-6 text-lg font-semibold text-gray-700">
+      <h3 className="mt-6 text-lg font-semibold">
         Slot disponibili il {selectedDate.toDateString()}
       </h3>
 
@@ -142,24 +142,25 @@ const CalendarWithSlots: React.FC = () => {
       <div className="mt-6 space-y-3">
         <input
           type="text"
-          placeholder="Your name"
+          placeholder="Chi sei?"
           value={reservationName}
           onChange={(e) => setReservationName(e.target.value)}
           className="w-full border px-3 py-2 rounded"
         />
         {selectedTimes.length > 0 && (
-          <div className="text-md text-gray-700 font-medium">
+          <div className="text-md font-medium">
             Costo stimato:{" "}
-            <span className="text-blue-600 font-semibold">
+            <span className="font-semibold text-secondary-700">
               €{calculateTotalCost(selectedTimes)}
             </span>
           </div>
         )}
         <div className="flex justify-center">
           <button
+            type="button"
             disabled={loading}
             onClick={handleSubmit}
-            className="bg-blue-600 text-white py-2 px-4 rounded disabled:opacity-50"
+            className="btn btn-lg variant-filled"
           >
             Prenota
           </button>

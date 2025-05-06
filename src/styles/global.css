@@ -100,19 +100,48 @@ html {
 	}
 }
 
+dialog,
+dialog::backdrop {
+  --anim-duration: 250ms;
+  transition:
+	display var(--anim-duration) allow-discrete,
+	overlay var(--anim-duration) allow-discrete,
+	opacity var(--anim-duration);
+  opacity: 0;
+}
+/* Animate In */
+dialog[open],
+dialog[open]::backdrop {
+  opacity: 1;
+}
+/* Animate Out */
+@starting-style {
+  dialog[open],
+  dialog[open]::backdrop {
+	opacity: 0;
+  }
+}
 
 .react-calendar {
-  @apply w-full max-w-md bg-white text-gray-800 rounded-lg overflow-hidden;
-}
+	@apply w-full max-w-md bg-surface-100 dark:bg-surface-900 text-primary-800 
+	rounded-xl overflow-hidden shadow-[0_8px_30px_rgba(0,0,0,0.2)] dark:shadow-[0_8px_30px_rgba(255,255,255,0.1)];
+	border border-primary-300 dark:border-primary-700;
+  }
+  
+  /* Weekday names */
+  .react-calendar__month-view__weekdays {
+	@apply text-sm font-medium text-secondary-600 dark:text-secondary-300 uppercase tracking-wide;
+  }
+  
+  /* Day numbers */
+  .react-calendar__tile {
+	@apply p-2 text-center text-base font-semibold hover:bg-secondary-100 
+	dark:hover:bg-secondary-700 rounded-lg transition-colors duration-300;
+  }
+  
+  
+  /* Navigation buttons */
+  .react-calendar__navigation button {
+	@apply text-primary-700 dark:text-primary-300 font-medium hover:text-primary-500 dark:hover:text-primary-400;
+  }
 
-.react-calendar__tile {
-  @apply p-2 text-center hover:bg-blue-100 rounded transition-colors duration-200;
-}
-
-.react-calendar__tile--active {
-  @apply bg-blue-500 text-white;
-}
-
-.react-calendar__navigation button {
-  @apply text-gray-700 font-medium;
-}
