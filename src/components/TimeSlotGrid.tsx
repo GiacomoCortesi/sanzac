@@ -11,7 +11,7 @@ const statusColors = {
   available: "bg-green-100 text-green-800 hover:bg-green-200 cursor-pointer",
   booked: "bg-red-100 text-red-800 cursor-not-allowed opacity-60",
   unavailable: "bg-gray-200 text-gray-500 cursor-not-allowed opacity-50",
-  selected: "bg-blue-600 text-white hover:bg-blue-700 cursor-pointer",
+  selected: "bg-tertiary-600 hover:bg-tertiary-700 cursor-pointer",
 };
 
 const formatTimeRange = (start: string) => {
