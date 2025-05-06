@@ -108,6 +108,7 @@ dialog::backdrop {
 	overlay var(--anim-duration) allow-discrete,
 	opacity var(--anim-duration);
   opacity: 0;
+
 }
 /* Animate In */
 dialog[open],
@@ -299,3 +300,4 @@ dark:hover:bg-secondary-700 rounded-lg transition-colors duration-300;
 	background-color: #e6e6e6;
   }
   
+}
