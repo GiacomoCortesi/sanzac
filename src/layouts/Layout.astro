@@ -1,27 +1,14 @@
 ---
-import "../styles/global.css";
-import Header from '../components/Header.tsx';
----
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>sanzac booking app</title>
-	</head>
-	<body>
-		<Header client:load />
-		<slot />
-	</body>
-</html>
+import LayoutRoot from "@layouts/LayoutRoot.astro";
+import Header from "@components/generic/Header.astro";
+import Footer from "@components/generic/Footer.astro";
 
-<style>
-	html,
-	body {
-		margin: 0;
-		width: 100%;
-		height: 100%;
-	}
-</style>
+---
+
+<LayoutRoot>
+	<Header></Header>
+	<main class="">
+		<slot></slot>
+	</main>
+	<!-- <Footer /> -->
+</LayoutRoot>

@@ -1,0 +1,36 @@
+---
+import { ChevronRight as IconChevron } from "lucide-react";
+import Logo from "@components/generic/Logo.astro";
+---
+
+<div class="grid grid-cols-1 xl:grid-cols-[256px_800px] gap-20">
+	<!-- Mascot -->
+	<div class="flex justify-center items-center">
+		<div
+			class="relative size-48 md:size-64 aspect-square justify-center items-center flex"
+		>
+			<Logo width="200" height="200" />
+			<!-- <div class="absolute top-0 left-0 size-full aspect-square rounded-full bg-conic from-success-500 to-primary-500 blur-3xl">
+			</div> -->
+		</div>
+	</div>
+	<!-- Hero Text -->
+	<div class="self-center space-y-4">
+		<!-- Text -->
+		<h1
+			class="heading-font-family text-4xl md:text-5xl font-bold xl:text-balance"
+		>
+			Benvenuto a SanZac
+		</h1>
+		<p class="text-lg md:text-xl text-primary-500">
+			Spazio autogestito per studio di registrazione e produzione musicale. 
+		</p>
+		<!-- CTA Buttons -->
+		<nav class="flex flex-col md:flex-row gap-4">
+			<a href="/mycv" class="btn preset-tonal-secondary">
+				<span>Prenota uno slot</span>
+				<IconChevron className="size-4" />
+			</a>
+		</nav>
+	</div>
+</div>
