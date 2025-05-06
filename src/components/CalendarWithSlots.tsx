@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import TimeSlotGrid from "./TimeSlotGrid";
 import { supabase } from "../lib/supabase";
 import type { TimeSlot } from "../types";
@@ -125,7 +124,7 @@ const CalendarWithSlots: React.FC = () => {
             setSelectedTimes([]);
           }}
           value={selectedDate}
-          className="REACT-CALENDAR"
+          className="react-calendar"
         />
       </div>
 
