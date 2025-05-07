@@ -1,7 +1,7 @@
 ---
 // Components
 import Drawer from '@components/basic/Drawer.astro';
-import Logo from '@components/basic/Logo.astro';
+import Logo from '@components/basic/Logo.tsx'
 import Lightswitch from '@components/basic/Lightswitch.astro';
 // Icons
 import { Linkedin, Github, Instagram, Mail } from "lucide-react";
@@ -26,8 +26,8 @@ const coreLinks = [
 			<!-- Mobile Nav Drawer -->
 			<Drawer navigation={coreLinks} />
 			<!-- Logo -->
-			<a class="hidden xl:inline-block" href="/" title="SanZac Studio">
-                <Logo width="32" height="32"></Logo>
+			<a class="hidden xl:inline-block" href="/" title="SanZak Studio">
+				<Logo>
 			</a>
 			<div class="hidden xl:flex items-center">
 				<!-- Version Picker -->
@@ -53,10 +53,10 @@ const coreLinks = [
 			<span class="border-r border-surface-200-800"></span>
 			<!-- Social -->
 			<nav class="flex items-center gap-1">
-				<a class="btn-icon hover:preset-tonal" href="mailto:info@sanzac.it">
+				<a class="btn-icon hover:preset-tonal" href="mailto:info@sanzak.it">
 					<Mail size={20} />
 				</a>
-				<a class="btn-icon hover:preset-tonal" href="https://www.instagram.com/sanzac.studio/" target="_blank">
+				<a class="btn-icon hover:preset-tonal" href="https://www.instagram.com/sanzak.studio/" target="_blank">
 					<Instagram size={20} />
 				</a>
 			</nav>

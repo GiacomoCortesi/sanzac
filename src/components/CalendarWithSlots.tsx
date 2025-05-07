@@ -156,10 +156,9 @@ const CalendarWithSlots: React.FC = () => {
         )}
         <div className="flex justify-center">
           <button
-            type="button"
             disabled={loading}
             onClick={handleSubmit}
-            className="btn btn-lg variant-filled"
+            className="btn btn-lg preset-outlined-secondary-500"
           >
             Prenota
           </button>

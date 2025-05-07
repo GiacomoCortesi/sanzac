@@ -1,6 +1,6 @@
 ---
 import { ChevronRight as IconChevron } from "lucide-react";
-import Logo from "@components/basic/Logo.astro";
+import Logo from "@components/basic/Logo.tsx";
 ---
 
 <div class="grid grid-cols-1 xl:grid-cols-[256px_800px] gap-20">
@@ -9,7 +9,7 @@ import Logo from "@components/basic/Logo.astro";
 		<div
 			class="relative size-48 md:size-64 aspect-square justify-center items-center flex"
 		>
-			<Logo width="200" height="200" />
+			<Logo className="w-64 h-auto"/>
 			<!-- <div class="absolute top-0 left-0 size-full aspect-square rounded-full bg-conic from-success-500 to-primary-500 blur-3xl">
 			</div> -->
 		</div>
@@ -20,7 +20,7 @@ import Logo from "@components/basic/Logo.astro";
 		<h1
 			class="heading-font-family text-4xl md:text-5xl font-bold xl:text-balance"
 		>
-			Benvenuto a SanZac
+			Benvenuto a SanZak
 		</h1>
 		<p class="text-lg md:text-xl">
 			Spazio autogestito per studio di registrazione e produzione musicale. 
