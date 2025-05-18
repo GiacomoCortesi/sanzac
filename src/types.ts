@@ -1,8 +1,9 @@
 // src/types.ts
-export type SlotStatus = "available" | "booked" | "unavailable";
+export type SlotStatus = "available" | "booked";
 
 export type TimeSlot = {
-  time: string;
-  status: SlotStatus;
+  startTime: string;
+  endTime: string;
+  status?: SlotStatus;
   reservedBy?: string;
 };

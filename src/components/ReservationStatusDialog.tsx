@@ -1,12 +1,12 @@
-// src/components/ReservationStatusDialog.tsx
 import React from "react";
+import type { TimeSlot } from "src/types";
 
 interface ReservationStatusDialogProps {
   isOpen: boolean;
   onClose: () => void;
   success: boolean;
   reservationDate: string;
-  bookedTimes: string[];
+  bookedSlots: TimeSlot[];
 }
 
 const ReservationStatusDialog: React.FC<ReservationStatusDialogProps> = ({
@@ -14,10 +14,12 @@ const ReservationStatusDialog: React.FC<ReservationStatusDialogProps> = ({
   onClose,
   success,
   reservationDate,
-  bookedTimes,
+  bookedSlots,
 }) => {
   if (!isOpen) return null;
-
+  const bookedTimes = bookedSlots.map((bookedSlot) => {
+    return bookedSlot.startTime + " - " + bookedSlot.endTime;
+  });
   const formattedTimes = bookedTimes.join(", ");
 
   return (

@@ -3,48 +3,65 @@ import type { TimeSlot } from "../types";
 
 type Props = {
   slots: TimeSlot[];
-  selectedTimes: string[];
+  selectedSlots: TimeSlot[];
   onToggleSlot: (slot: TimeSlot) => void;
+  date: Date;
 };
 
 const statusColors = {
-  available: "bg-tertiary-100 text-green-800 hover:bg-green-200 cursor-pointer",
+  available:
+    "bg-tertiary-300 text-tertiary-800 hover:bg-tertiary-100 cursor-pointer",
   booked: "bg-red-100 text-red-800 cursor-not-allowed opacity-60",
   unavailable: "bg-gray-200 text-gray-500 cursor-not-allowed opacity-50",
   selected: "bg-tertiary-600 hover:bg-tertiary-700 cursor-pointer",
 };
 
-const formatTimeRange = (start: string) => {
-  const [hour, minute] = start.split(":").map(Number);
-  const endHour = (hour + 1).toString().padStart(2, "0");
-  return `${start} - ${endHour}:${minute.toString().padStart(2, "0")}`;
+const isPastSlot = (date: Date, time: string) => {
+  const now = new Date();
+  const slotDateTime = new Date(date);
+  const [hour, minute] = time.split(":").map(Number);
+  slotDateTime.setHours(hour, minute, 0, 0);
+
+  return slotDateTime < now;
 };
 
 const TimeSlotGrid: React.FC<Props> = ({
   slots,
-  selectedTimes,
+  selectedSlots,
   onToggleSlot,
+  date,
 }) => {
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
       {slots.map((slot, idx) => {
-        const isSelected = selectedTimes.includes(slot.time);
-        const statusClass =
-          slot.status === "available" && isSelected
-            ? statusColors.selected
-            : statusColors[slot.status];
+        const past = isPastSlot(date, slot.startTime);
+
+        const isSelected = selectedSlots.some(
+          (selectedSlot) => selectedSlot.startTime === slot.startTime
+        );
+        const isClickable = slot.status === "available" && !past;
+
+        const statusClass = isSelected
+          ? statusColors.selected
+          : past
+          ? statusColors.unavailable
+          : slot.status === "available"
+          ? statusColors.available
+          : statusColors.unavailable;
 
         return (
           <div
             key={idx}
-            onClick={() => slot.status === "available" && onToggleSlot(slot)}
-            className={`py-2 px-3 rounded-lg text-center shadow-sm transition ${statusClass}`}
+            onClick={() => isClickable && onToggleSlot(slot)}
+            className={`flex-col justify-center items-center py-2 px-3 rounded-lg text-center shadow-sm transition min-h-20 ${statusClass}`}
           >
-            <div>{formatTimeRange(slot.time)}</div>
+            <p className="text-lg md:text-xl">
+              {slot.startTime} - {slot.endTime}
+            </p>
             {slot.status === "booked" && slot.reservedBy && (
-              <div className="text-xs text-red-700 mt-1 italic">
+              <p className="text-lg text-red-700 mt-1 italic">
                 {slot.reservedBy}
-              </div>
+              </p>
             )}
           </div>
         );

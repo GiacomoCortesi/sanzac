@@ -5,23 +5,23 @@ import { supabase } from "../lib/supabase";
 import type { TimeSlot } from "../types";
 import ReservationStatusDialog from "./ReservationStatusDialog";
 
-const PRICE_PER_HOUR = 20;
+const PRICE_PER_SLOT = 25;
 
-const calculateTotalCost = (slots: string[]) => {
-  return slots.length * PRICE_PER_HOUR;
+const calculateTotalCost = (slots: TimeSlot[]) => {
+  return slots.length * PRICE_PER_SLOT;
 };
 
 const CalendarWithSlots: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [slots, setSlots] = useState<TimeSlot[]>([]);
-  const [selectedTimes, setSelectedTimes] = useState<string[]>([]);
+  const [selectedSlots, setSelectedSlots] = useState<TimeSlot[]>([]);
   const [reservationName, setReservationName] = useState("");
   const [loading, setLoading] = useState(false);
   const [reservationStatus, setReservationStatus] = useState({
     isOpen: false,
     success: false,
     bookedDate: "",
-    bookedTimes: [] as string[],
+    bookedSlots: [] as TimeSlot[],
   });
 
   const fetchReservations = async (date: Date) => {
@@ -36,22 +36,32 @@ const CalendarWithSlots: React.FC = () => {
 
   const generateSlots = async (date: Date) => {
     const existing = await fetchReservations(date);
-    const hours = Array.from({ length: 15 }, (_, i) => i + 9);
-
-    return hours.map((hour) => {
-      const time = new Date(date);
-      time.setHours(hour, 0, 0, 0);
-      const label = time.toLocaleTimeString([], {
-        hour: "2-digit",
-        minute: "2-digit",
-      });
-
-      const match = existing.find((r) => r.time === label);
-      const status: "available" | "booked" | "unavailable" =
-        hour === 12 ? "unavailable" : match ? "booked" : "available";
-
+    const slots = [
+      {
+        startTime: "9:00",
+        endTime: "13:00",
+      },
+      {
+        startTime: "13:00",
+        endTime: "16:00",
+      },
+      {
+        startTime: "16:00",
+        endTime: "19:00",
+      },
+      {
+        startTime: "19:00",
+        endTime: "22:00",
+      },
+    ];
+    return slots.map((slot) => {
+      const match = existing.find((r) => r.start_time === slot.startTime);
+      const status: "available" | "booked" | "pending" = match
+        ? "booked"
+        : "available";
       return {
-        time: label,
+        startTime: slot.startTime,
+        endTime: slot.endTime,
         status,
         reservedBy: match?.name,
       };
@@ -59,20 +69,20 @@ const CalendarWithSlots: React.FC = () => {
   };
 
   const handleToggleSlot = (slot: TimeSlot) => {
-    setSelectedTimes((prev) =>
-      prev.includes(slot.time)
-        ? prev.filter((t) => t !== slot.time)
-        : [...prev, slot.time]
+    setSelectedSlots((prev) =>
+      prev.some((prevSlot) => prevSlot.startTime == slot.startTime)
+        ? prev.filter((t) => t.startTime !== slot.startTime)
+        : [...prev, { startTime: slot.startTime, endTime: slot.endTime }]
     );
   };
 
   const handleSubmit = async () => {
-    if (!reservationName || selectedTimes.length === 0) {
+    if (!reservationName || selectedSlots.length === 0) {
       setReservationStatus({
         isOpen: true,
         success: false,
         bookedDate: "",
-        bookedTimes: [],
+        bookedSlots: [],
       });
       return;
     }
@@ -80,10 +90,12 @@ const CalendarWithSlots: React.FC = () => {
     setLoading(true);
     const isoDate = selectedDate.toISOString().split("T")[0];
 
-    const payload = selectedTimes.map((time) => ({
+    const payload = selectedSlots.map((selectedSlot) => ({
       date: isoDate,
-      time,
+      start_time: selectedSlot.startTime,
+      end_time: selectedSlot.endTime,
       name: reservationName,
+      status: "pending",
     }));
 
     const { error } = await supabase.from("reservations").insert(payload);
@@ -93,16 +105,16 @@ const CalendarWithSlots: React.FC = () => {
         isOpen: true,
         success: false,
         bookedDate: "",
-        bookedTimes: [],
+        bookedSlots: [],
       });
     } else {
       setReservationStatus({
         isOpen: true,
         success: true,
         bookedDate: selectedDate?.toLocaleDateString() || "",
-        bookedTimes: selectedTimes,
+        bookedSlots: selectedSlots,
       });
-      setSelectedTimes([]);
+      setSelectedSlots([]);
       setReservationName("");
       const updated = await generateSlots(selectedDate);
       setSlots(updated);
@@ -121,7 +133,7 @@ const CalendarWithSlots: React.FC = () => {
         <Calendar
           onChange={(date) => {
             setSelectedDate(date as Date);
-            setSelectedTimes([]);
+            setSelectedSlots([]);
           }}
           value={selectedDate}
           className="react-calendar"
@@ -134,8 +146,9 @@ const CalendarWithSlots: React.FC = () => {
 
       <TimeSlotGrid
         slots={slots}
-        selectedTimes={selectedTimes}
+        selectedSlots={selectedSlots}
         onToggleSlot={handleToggleSlot}
+        date={selectedDate}
       />
 
       <div className="mt-6 space-y-3">
@@ -146,11 +159,11 @@ const CalendarWithSlots: React.FC = () => {
           onChange={(e) => setReservationName(e.target.value)}
           className="w-full border px-3 py-2 rounded"
         />
-        {selectedTimes.length > 0 && (
+        {selectedSlots.length > 0 && (
           <div className="text-md font-medium">
-            Costo stimato:{" "}
+            Costo:{" "}
             <span className="font-semibold text-secondary-700">
-              €{calculateTotalCost(selectedTimes)}
+              €{calculateTotalCost(selectedSlots)}
             </span>
           </div>
         )}
@@ -171,7 +184,7 @@ const CalendarWithSlots: React.FC = () => {
         }
         success={reservationStatus.success}
         reservationDate={reservationStatus.bookedDate}
-        bookedTimes={reservationStatus.bookedTimes}
+        bookedSlots={reservationStatus.bookedSlots}
       />
     </div>
   );

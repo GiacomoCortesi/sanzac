@@ -5,6 +5,7 @@ import Logo from '@components/basic/Logo.tsx'
 import Lightswitch from '@components/basic/Lightswitch.astro';
 // Icons
 import { Linkedin, Github, Instagram, Mail } from "lucide-react";
+import { FiSettings } from "react-icons/fi";
 
 
 const coreLinks = [
@@ -53,6 +54,9 @@ const coreLinks = [
 			<span class="border-r border-surface-200-800"></span>
 			<!-- Social -->
 			<nav class="flex items-center gap-1">
+				<a class="btn-icon hover:preset-tonal" href="/authredirect">
+					<FiSettings size={20} />
+				</a>
 				<a class="btn-icon hover:preset-tonal" href="mailto:info@sanzak.it">
 					<Mail size={20} />
 				</a>
