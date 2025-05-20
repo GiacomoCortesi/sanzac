@@ -25,7 +25,12 @@ const CalendarWithSlots: React.FC = () => {
   });
 
   const fetchReservations = async (date: Date) => {
-    const isoDate = date.toISOString().split("T")[0];
+    const year = selectedDate.getFullYear();
+    const month = (selectedDate.getMonth() + 1).toString().padStart(2, "0");
+    const day = selectedDate.getDate().toString().padStart(2, "0");
+
+    const isoDate = `${year}-${month}-${day}`;
+
     const { data, error } = await supabase
       .from("reservations")
       .select("*")
@@ -86,9 +91,11 @@ const CalendarWithSlots: React.FC = () => {
       });
       return;
     }
+    const year = selectedDate.getFullYear();
+    const month = (selectedDate.getMonth() + 1).toString().padStart(2, "0");
+    const day = selectedDate.getDate().toString().padStart(2, "0");
 
-    setLoading(true);
-    const isoDate = selectedDate.toISOString().split("T")[0];
+    const isoDate = `${year}-${month}-${day}`;
 
     const payload = selectedSlots.map((selectedSlot) => ({
       date: isoDate,
