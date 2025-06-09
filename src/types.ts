@@ -1,5 +1,5 @@
 // src/types.ts
-export type SlotStatus = "available" | "booked";
+export type SlotStatus = "available" | "booked" | "pending";
 
 export type TimeSlot = {
   startTime: string;

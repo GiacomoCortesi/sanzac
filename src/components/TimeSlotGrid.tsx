@@ -12,6 +12,7 @@ const statusColors = {
   available:
     "bg-tertiary-300 text-tertiary-800 hover:bg-tertiary-100 cursor-pointer",
   booked: "bg-red-100 text-red-800 cursor-not-allowed opacity-60",
+  pending: "bg-yellow-200 text-tertiary-800 cursor-not-allowed opacity-60",
   unavailable: "bg-gray-200 text-gray-500 cursor-not-allowed opacity-50",
   selected: "bg-tertiary-600 hover:bg-tertiary-700 cursor-pointer",
 };
@@ -41,13 +42,16 @@ const TimeSlotGrid: React.FC<Props> = ({
         );
         const isClickable = slot.status === "available" && !past;
 
-        const statusClass = isSelected
-          ? statusColors.selected
-          : past
-          ? statusColors.unavailable
-          : slot.status === "available"
-          ? statusColors.available
-          : statusColors.unavailable;
+        let statusClass = statusColors.available;
+        if (isSelected) {
+          statusClass = statusColors.selected;
+        }
+        if (past || slot.status === "booked") {
+          statusClass = statusColors.unavailable;
+        }
+        if (slot.status === "pending") {
+          statusClass = statusColors.pending;
+        }
 
         return (
           <div
@@ -58,7 +62,7 @@ const TimeSlotGrid: React.FC<Props> = ({
             <p className="text-lg md:text-xl">
               {slot.startTime} - {slot.endTime}
             </p>
-            {slot.status === "booked" && slot.reservedBy && (
+            {slot.status !== "available" && (
               <p className="text-lg text-red-700 mt-1 italic">
                 {slot.reservedBy}
               </p>

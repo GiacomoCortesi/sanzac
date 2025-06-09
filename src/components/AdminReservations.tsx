@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { supabase } from "../lib/supabase";
+import { supabase } from "../supabase/supabase";
 import {
   FaTrash,
   FaCheck,
@@ -8,6 +8,7 @@ import {
   FaSortDown,
   FaCheckCircle,
 } from "react-icons/fa";
+import { actions } from "astro:actions";
 
 type Reservation = {
   id: string;
@@ -16,6 +17,7 @@ type Reservation = {
   end_time: string;
   name: string;
   status: string;
+  email: string;
 };
 
 const AdminReservations = () => {
@@ -60,17 +62,39 @@ const AdminReservations = () => {
     }
   };
 
-  const deleteReservation = async (id: string) => {
-    await supabase.from("reservations").delete().eq("id", id);
-    fetchReservations();
+  const fetchReservation = async (id: string) => {
+    const { data, error } = await supabase
+      .from("reservations")
+      .select("*")
+      .eq("id", id)
+      .single();
+
+    return error ? undefined : data;
   };
 
-  const acceptReservation = async (id: string) => {
+  const deleteReservation = async (id: string) => {
+    const toDeleteReservation = await fetchReservation(id);
+    await supabase.from("reservations").delete().eq("id", id);
+    fetchReservations();
+    console.log(toDeleteReservation);
+    const result = await actions.emailActions.sendReservationDeniedEmail({
+      to: toDeleteReservation?.email,
+      userName: toDeleteReservation?.name,
+    });
+  };
+
+  const acceptReservation = async (reservation: Reservation) => {
     await supabase
       .from("reservations")
       .update({ status: "accepted" })
-      .eq("id", id);
+      .eq("id", reservation.id);
     fetchReservations();
+    if (reservation.email) {
+      const result = await actions.emailActions.sendReservationConfirmedEmail({
+        to: reservation?.email,
+        userName: reservation.id,
+      });
+    }
   };
 
   const acceptAllPending = async () => {
@@ -156,8 +180,8 @@ const AdminReservations = () => {
                       res.status === "pending"
                         ? "badge-warning"
                         : res.status === "accepted"
-                        ? "badge-success"
-                        : "badge-ghost"
+                          ? "badge-success"
+                          : "badge-ghost"
                     }`}
                   >
                     {res.status}
@@ -167,7 +191,7 @@ const AdminReservations = () => {
                   {res.status === "pending" && (
                     <button
                       className="btn btn-sm btn-success"
-                      onClick={() => acceptReservation(res.id)}
+                      onClick={() => acceptReservation(res)}
                       title="Accept"
                     >
                       <FaCheck />

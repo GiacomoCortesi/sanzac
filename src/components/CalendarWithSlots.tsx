@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Calendar from "react-calendar";
 import TimeSlotGrid from "./TimeSlotGrid";
-import { supabase } from "../lib/supabase";
+import { supabase } from "../supabase/supabase";
 import type { TimeSlot } from "../types";
 import ReservationStatusDialog from "./ReservationStatusDialog";
+import { actions } from "astro:actions";
 
 const PRICE_PER_SLOT = 25;
 
@@ -16,6 +17,7 @@ const CalendarWithSlots: React.FC = () => {
   const [slots, setSlots] = useState<TimeSlot[]>([]);
   const [selectedSlots, setSelectedSlots] = useState<TimeSlot[]>([]);
   const [reservationName, setReservationName] = useState("");
+  const [reservationEmail, setReservationEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [reservationStatus, setReservationStatus] = useState({
     isOpen: false,
@@ -61,13 +63,16 @@ const CalendarWithSlots: React.FC = () => {
     ];
     return slots.map((slot) => {
       const match = existing.find((r) => r.start_time === slot.startTime);
-      const status: "available" | "booked" | "pending" = match
+      let status: "available" | "booked" | "pending" = match
         ? "booked"
         : "available";
+      if (match?.status === "pending") {
+        status = "pending";
+      }
       return {
         startTime: slot.startTime,
         endTime: slot.endTime,
-        status,
+        status: status,
         reservedBy: match?.name,
       };
     });
@@ -103,6 +108,7 @@ const CalendarWithSlots: React.FC = () => {
       end_time: selectedSlot.endTime,
       name: reservationName,
       status: "pending",
+      email: reservationEmail || "",
     }));
 
     const { error } = await supabase.from("reservations").insert(payload);
@@ -125,6 +131,17 @@ const CalendarWithSlots: React.FC = () => {
       setReservationName("");
       const updated = await generateSlots(selectedDate);
       setSlots(updated);
+
+      if (reservationEmail) {
+        const result = await actions.emailActions.sendReservationAcceptedEmail({
+          to: reservationEmail,
+          userName: reservationName,
+        });
+      }
+
+      const result = await actions.emailActions.sendReservationRequestEmail({
+        userName: reservationName,
+      });
     }
 
     setLoading(false);
@@ -164,6 +181,13 @@ const CalendarWithSlots: React.FC = () => {
           placeholder="Chi sei?"
           value={reservationName}
           onChange={(e) => setReservationName(e.target.value)}
+          className="w-full border px-3 py-2 rounded"
+        />
+        <input
+          type="email"
+          placeholder="Email (opzionale)"
+          value={reservationEmail}
+          onChange={(e) => setReservationEmail(e.target.value)}
           className="w-full border px-3 py-2 rounded"
         />
         {selectedSlots.length > 0 && (

@@ -31,8 +31,12 @@ const ReservationStatusDialog: React.FC<ReservationStatusDialogProps> = ({
         {success ? (
           <>
             <p className="mb-4 text-lg">
-              La tua prenotazione è stata confermata per il{" "}
-              <strong>{reservationDate}</strong>.
+              La tua prenotazione per il <strong>{reservationDate}</strong>. è
+              stata accettata
+            </p>
+            <p className="mb-4 text-lg">
+              Se hai inserito un indirizzo email valido riceverai presto una mail di
+              conferma, altrimenti monitora lo stato dal calendario.
             </p>
             <p className="mb-4 text-lg">
               Orari prenotati: <strong>{formattedTimes}</strong>
