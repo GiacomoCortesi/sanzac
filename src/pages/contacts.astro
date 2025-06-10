@@ -1,4 +1,5 @@
 ---
+import LocationMap from '@components/LocationMap';
 import BaseLayout from '../layouts/Layout.astro';
 import { HiPhone, HiMail } from 'react-icons/hi';
 ---
@@ -14,16 +15,17 @@ import { HiPhone, HiMail } from 'react-icons/hi';
     <ul class="space-y-4 text-lg">
       <li class="flex items-center gap-3">
         <HiPhone className="w-6 h-6 " />
-        <a href="tel:+393471112233" class="anchor hover:underline">+39 347 111 2233</a>
+        <a href="tel:+39 366 549 3756" class="anchor hover:underline">+39 366 549 3756</a>
       </li>
       <li class="flex items-center gap-3">
         <HiMail className="w-6 h-6" />
-        <a href="mailto:info@sanzak.it" class="anchor hover:underline">info@sanzak.it</a>
+        <a href="mailto:vedimeglioquandosentiaps@gmail.com" class="anchor hover:underline">vedimeglioquandosentiaps@gmail.com</a>
       </li>
     </ul>
 
-    <p class="mt-10 text-sm text-secondary-500 italic">
-      Puoi anche scriverci su WhatsApp o Telegram — ti risponderemo appena possibile.
-    </p>
+    <p class="mt-4 text-lg">Dove siamo</p>
+    <div class="w-full max-w-4xl mt-2">
+      <LocationMap client:only="react" />
+  </div>
   </section>
 </BaseLayout>

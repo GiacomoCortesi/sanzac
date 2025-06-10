@@ -62,24 +62,12 @@ const AdminReservations = () => {
     }
   };
 
-  const fetchReservation = async (id: string) => {
-    const { data, error } = await supabase
-      .from("reservations")
-      .select("*")
-      .eq("id", id)
-      .single();
-
-    return error ? undefined : data;
-  };
-
-  const deleteReservation = async (id: string) => {
-    const toDeleteReservation = await fetchReservation(id);
-    await supabase.from("reservations").delete().eq("id", id);
+  const deleteReservation = async (reservation: Reservation) => {
+    await supabase.from("reservations").delete().eq("id", reservation.id);
     fetchReservations();
-    console.log(toDeleteReservation);
     const result = await actions.emailActions.sendReservationDeniedEmail({
-      to: toDeleteReservation?.email,
-      userName: toDeleteReservation?.name,
+      to: reservation?.email,
+      userName: reservation?.name,
     });
   };
 
@@ -92,7 +80,7 @@ const AdminReservations = () => {
     if (reservation.email) {
       const result = await actions.emailActions.sendReservationConfirmedEmail({
         to: reservation?.email,
-        userName: reservation.id,
+        userName: reservation.name,
       });
     }
   };
@@ -199,7 +187,7 @@ const AdminReservations = () => {
                   )}
                   <button
                     className="btn btn-sm btn-error"
-                    onClick={() => deleteReservation(res.id)}
+                    onClick={() => deleteReservation(res)}
                     title="Delete"
                   >
                     <FaTrash />
