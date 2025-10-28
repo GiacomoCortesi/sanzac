@@ -2,6 +2,7 @@
 // Components
 import Drawer from '@components/basic/Drawer.astro';
 import Logo from '@components/basic/Logo.tsx'
+import LogoutButton from '@components/LogoutButton'
 import Lightswitch from '@components/basic/Lightswitch.astro';
 // Icons
 import { Linkedin, Github, Instagram, Mail } from "lucide-react";
@@ -54,6 +55,7 @@ const coreLinks = [
 			<span class="border-r border-surface-200-800"></span>
 			<!-- Social -->
 			<nav class="flex items-center gap-1">
+				<LogoutButton client:load />
 				<a class="btn-icon hover:preset-tonal" href="/authredirect">
 					<FiSettings size={20} />
 				</a>
